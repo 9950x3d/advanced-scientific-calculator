@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고급 공학용 계산기 - Advanced Scientific Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="calculator-container">
+        <header class="calculator-header">
+            <div class="header-info">
+                <h1>ADVANCED CALC</h1>
+                <span class="version">PRO v2.1</span>
+            </div>
+            <div class="status-indicators">
+                <span class="indicator active" title="Scientific Mode">SCI</span>
+                <span class="indicator" title="Radian Mode" id="angleMode">RAD</span>
+                <span class="indicator" title="Memory Active" id="memoryIndicator">MEM</span>
+            </div>
+        </header>
+        
+        <div class="display-section">
+            <div class="expression-display" id="expressionDisplay"></div>
+            <div class="main-display" id="mainDisplay">0</div>
+            <div class="error-display" id="errorDisplay"></div>
+        </div>
+        
+        <div class="button-grid">
+            <!-- Row 1: Memory & Clear Functions -->
+            <button class="btn memory" onclick="memoryRecall()">MR</button>
+            <button class="btn memory" onclick="memoryAdd()">M+</button>
+            <button class="btn memory" onclick="memorySub()">M-</button>
+            <button class="btn memory" onclick="memoryClear()">MC</button>
+            <button class="btn clear" onclick="clearAll()">AC</button>
+            <button class="btn clear" onclick="clearEntry()">CE</button>
+            <button class="btn operator" onclick="backspace()">⌫</button>
+            
+            <!-- Row 2: Advanced Functions -->
+            <button class="btn function" onclick="insertFunction('sin(')">sin</button>
+            <button class="btn function" onclick="insertFunction('cos(')">cos</button>
+            <button class="btn function" onclick="insertFunction('tan(')">tan</button>
+            <button class="btn function" onclick="insertFunction('log(')">log</button>
+            <button class="btn function" onclick="insertFunction('ln(')">ln</button>
+            <button class="btn function" onclick="insertConstant('e')">e</button>
+            <button class="btn operator" onclick="appendOperator('/')" title="Division">÷</button>
+            
+            <!-- Row 3: Inverse Functions -->
+            <button class="btn function" onclick="insertFunction('asin(')">sin⁻¹</button>
+            <button class="btn function" onclick="insertFunction('acos(')">cos⁻¹</button>
+            <button class="btn function" onclick="insertFunction('atan(')">tan⁻¹</button>
+            <button class="btn function" onclick="insertFunction('sqrt(')">√</button>
+            <button class="btn function" onclick="insertOperator('^')">xʸ</button>
+            <button class="btn function" onclick="insertConstant('π')">π</button>
+            <button class="btn operator" onclick="appendOperator('*')" title="Multiplication">×</button>
+            
+            <!-- Row 4: Hyperbolic Functions -->
+            <button class="btn function" onclick="insertFunction('sinh(')">sinh</button>
+            <button class="btn function" onclick="insertFunction('cosh(')">cosh</button>
+            <button class="btn function" onclick="insertFunction('tanh(')">tanh</button>
+            <button class="btn function" onclick="insertFunction('factorial(')">n!</button>
+            <button class="btn function" onclick="insertOperator('^2')">x²</button>
+            <button class="btn function" onclick="insertFunction('abs(')">|x|</button>
+            <button class="btn operator" onclick="appendOperator('-')" title="Subtraction">−</button>
+            
+            <!-- Row 5: Numbers Row 1 -->
+            <button class="btn number" onclick="appendNumber('7')">7</button>
+            <button class="btn number" onclick="appendNumber('8')">8</button>
+            <button class="btn number" onclick="appendNumber('9')">9</button>
+            <button class="btn function" onclick="insertFunction('(')">( )</button>
+            <button class="btn function" onclick="toggleSign()">±</button>
+            <button class="btn function" onclick="insertFunction('exp(')">exp</button>
+            <button class="btn operator" onclick="appendOperator('+')" title="Addition">+</button>
+            
+            <!-- Row 6: Numbers Row 2 -->
+            <button class="btn number" onclick="appendNumber('4')">4</button>
+            <button class="btn number" onclick="appendNumber('5')">5</button>
+            <button class="btn number" onclick="appendNumber('6')">6</button>
+            <button class="btn function" onclick="insertFunction('floor(')">⌊x⌋</button>
+            <button class="btn function" onclick="insertFunction('ceil(')">⌈x⌉</button>
+            <button class="btn function" onclick="toggleAngleMode()" id="angleModeBtn">DEG</button>
+            <button class="btn equals" onclick="calculate()" rowspan="2">=</button>
+            
+            <!-- Row 7: Numbers Row 3 -->
+            <button class="btn number" onclick="appendNumber('1')">1</button>
+            <button class="btn number" onclick="appendNumber('2')">2</button>
+            <button class="btn number" onclick="appendNumber('3')">3</button>
+            <button class="btn function" onclick="insertFunction('random()')">RND</button>
+            <button class="btn function" onclick="insertFunction('mod(')">MOD</button>
+            <button class="btn function" onclick="insertFunction('percent(')">%</button>
+            
+            <!-- Row 8: Bottom Row -->
+            <button class="btn number zero" onclick="appendNumber('0')">0</button>
+            <button class="btn decimal" onclick="appendDecimal()">.</button>
+            <button class="btn function" onclick="insertFunction('inv(')">1/x</button>
+            <button class="btn function" onclick="showHistory()" title="History">📊</button>
+            <button class="btn function" onclick="showConstants()" title="Constants">⚛</button>
+        </div>
+        
+        <div class="history-panel" id="historyPanel">
+            <div class="panel-header">
+                <h3>계산 기록</h3>
+                <button onclick="closeHistory()">×</button>
+            </div>
+            <div class="history-content" id="historyContent">
+                <p class="empty-history">아직 계산 기록이 없습니다.</p>
+            </div>
+            <button class="clear-history" onclick="clearHistory()">기록 지우기</button>
+        </div>
+        
+        <div class="constants-panel" id="constantsPanel">
+            <div class="panel-header">
+                <h3>과학 상수</h3>
+                <button onclick="closeConstants()">×</button>
+            </div>
+            <div class="constants-grid">
+                <button onclick="insertConstant('c')">c (광속)</button>
+                <button onclick="insertConstant('h')">h (플랑크 상수)</button>
+                <button onclick="insertConstant('k')">k (볼츠만 상수)</button>
+                <button onclick="insertConstant('Na')">Nₐ (아보가드로 수)</button>
+                <button onclick="insertConstant('G')">G (중력 상수)</button>
+                <button onclick="insertConstant('R')">R (기체 상수)</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
